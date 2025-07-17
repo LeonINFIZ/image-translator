@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/5.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
+import os
 
 from pathlib import Path
 
@@ -106,7 +107,11 @@ STATICFILES_DIRS = [
     BASE_DIR.parent / "static",
 ]
 
-GOOGLE_APPLICATION_CREDENTIALS = BASE_DIR.parent / "poised-conduit-466006-c2-428db6f8af5e.json"
+
+GOOGLE_APPLICATION_CREDENTIALS = os.getenv(
+    "GOOGLE_APPLICATION_CREDENTIALS",
+    BASE_DIR.parent / "poised-conduit-466006-c2-428db6f8af5e.json"
+)
 
 FONT_PATH = BASE_DIR.parent / "arial.ttf"
 TESSERACT_CMD = BASE_DIR.parent / "Tesseract-OCR" / "tesseract.exe"

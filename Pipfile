@@ -53,7 +53,3 @@ crispy-bootstrap5 = "==2025.4"
 isort = "*"
 
 [dev-packages]
-
-[requires]
-python_version = "3.12"
-python_full_version = "3.12.6"
