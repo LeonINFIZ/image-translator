@@ -1,11 +1,14 @@
 name: Image Translator Django CI
 
-# Виправлено синтаксис запуску
+
 on:
   push:
-    branches: [ "main" ] # Запускати для гілки main
+    branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
+
+env:
+  DJANGO_SETTINGS_MODULE: config.settings.dev
 
 jobs:
   test:

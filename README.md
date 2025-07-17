@@ -49,9 +49,9 @@ Tesseract is an external dependency and must be installed on your system.
 **For Windows:**
 1.  Download the installer from [Tesseract at UB Mannheim](https://github.com/UB-Mannheim/tesseract/wiki). It's recommended to download an installer for a version >= 5.
 2.  Run the installer. During installation, make sure to select the language data you need (e.g., English, Russian, German, etc.). The application is currently configured to use English and Russian (`eng+rus`).
-3.  After installation, you need to tell the Django application where to find Tesseract. Open `src/config/settings.py` and update the `TESSERACT_CMD` variable to point to your `tesseract.exe` location.
+3.  After installation, you need to tell the Django application where to find Tesseract. Open `src/config/settings/base.py` and update the `TESSERACT_CMD` variable to point to your `tesseract.exe` location.
     ```python
-    # src/config/settings.py
+    # src/config/settings/base.py
     TESSERACT_CMD = "C:/Program Files/Tesseract-OCR/tesseract.exe" # <-- Update this path
     ```
 
@@ -74,9 +74,9 @@ The application uses the Google Cloud Translation API. You will need a service a
 5.  **Use the Key**:
     -   Place the downloaded `.json` file in the **root directory** of this project.
     -   **Important**: The `.gitignore` file is already configured to prevent `*.json` files from being committed. **Never commit your credentials file to Git.**
-    -   Finally, update the path in `src/config/settings.py` to match your key file's name.
+    -   Finally, update the path in `src/config/settings/base.py` to match your key file's name.
     ```python
-    # src/config/settings.py
+    # src/config/settings/base.py
     # Update this line with the name of your key file
     GOOGLE_APPLICATION_CREDENTIALS = BASE_DIR.parent / "your-credentials-file-name.json"
     ```
