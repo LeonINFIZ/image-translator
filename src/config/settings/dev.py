@@ -1,4 +1,4 @@
-from config.settings.base import *
+from config.settings.base import *  # NOQA:F403
 
 SECRET_KEY = "django-insecure-7rk)yxw7=uyftasz0b&9^ez)6$isnsznedn2l(f%!rs$7gdef$"
 

@@ -68,7 +68,6 @@ USE_I18N = True
 USE_TZ = True
 
 
-
 GOOGLE_APPLICATION_CREDENTIALS = os.getenv(
     "GOOGLE_APPLICATION_CREDENTIALS",
     BASE_DIR.parent / "poised-conduit-466006-c2-428db6f8af5e.json",
