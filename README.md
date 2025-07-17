@@ -47,7 +47,7 @@ pipenv shell
 Tesseract is an external dependency and must be installed on your system.
 
 **For Windows:**
-1.  Download the installer from Tesseract at UB Mannheim. It's recommended to download an installer for a version >= 5.
+1.  Download the installer from [Tesseract at UB Mannheim](https://github.com/UB-Mannheim/tesseract/wiki). It's recommended to download an installer for a version >= 5.
 2.  Run the installer. During installation, make sure to select the language data you need (e.g., English, Russian, German, etc.). The application is currently configured to use English and Russian (`eng+rus`).
 3.  After installation, you need to tell the Django application where to find Tesseract. Open `src/config/settings.py` and update the `TESSERACT_CMD` variable to point to your `tesseract.exe` location.
     ```python
