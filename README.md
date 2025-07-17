@@ -1,4 +1,4 @@
-# Image Translator
+# <img src="static/logo/ImageTranslator_logo_wide_white.svg" width="300" alt="Image Translator Logo">
 
 A web app that extracts text from images and translates it into any language — available both as plain text and visually overlaid on the original image.
 
