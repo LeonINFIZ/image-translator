@@ -1,0 +1,184 @@
+{% extends 'base.html' %}
+
+{% block title %}Перекладач зображень{% endblock %}
+
+{% block content %}
+
+
+{% if not submitted %}
+<div class="d-flex align-items-center justify-content-center" style="min-height: 75vh;">
+    <div class="col-lg-6 col-md-8">
+        <h1 class="mb-4 text-center">Переклад тексту на зображенні</h1>
+        <div class="card">
+            <div class="card-body p-4">
+
+                <form method="post" enctype="multipart/form-data" action="{% url 'translator:translate' %}">
+                    {% csrf_token %}
+                    <div class="mb-4">
+                        <label for="{{ form.image.id_for_label }}" class="form-label fs-5">{{ form.image.label }}</label>
+                        {{ form.image }}
+                        {% if form.image.help_text %}<div class="form-text">{{ form.image.help_text }}</div>{% endif %}
+                        {% for error in form.image.errors %}<div class="text-danger small mt-1">{{ error }}</div>{% endfor %}
+                    </div>
+                    <div class="form-floating mb-4">
+                        {{ form.language }}
+                        <label for="{{ form.language.id_for_label }}">{{ form.language.label }}</label>
+                         {% for error in form.language.errors %}<div class="text-danger small mt-1">{{ error }}</div>{% endfor %}
+                    </div>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary btn-lg">Перекласти</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% else %}
+
+<div class="row justify-content-center">
+    <div class="col-lg-6 col-md-8">
+        <h1 class="mb-4 text-center">Новий переклад</h1>
+        <div class="card mb-5">
+            <div class="card-body p-4">
+
+                <form method="post" enctype="multipart/form-data" action="{% url 'translator:translate' %}">
+                    {% csrf_token %}
+                    <div class="mb-4">
+                        <label for="{{ form.image.id_for_label }}" class="form-label fs-5">{{ form.image.label }}</label>
+                        {{ form.image }}
+                        {% if form.image.help_text %}<div class="form-text">{{ form.image.help_text }}</div>{% endif %}
+                        {% for error in form.image.errors %}<div class="text-danger small mt-1">{{ error }}</div>{% endfor %}
+                    </div>
+                    <div class="form-floating mb-4">
+                        {{ form.language }}
+                        <label for="{{ form.language.id_for_label }}">{{ form.language.label }}</label>
+                         {% for error in form.language.errors %}<div class="text-danger small mt-1">{{ error }}</div>{% endfor %}
+                    </div>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary btn-lg">Перекласти</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+
+{% if error %}
+    <div class="row justify-content-center">
+        <div class="col-lg-6 col-md-8">
+            <div class="alert alert-danger" role="alert">
+                {{ error }}
+            </div>
+        </div>
+    </div>
+{% endif %}
+
+
+{% if submitted %}
+    {% with source_lang=result_record.source_language target_lang=result_record.target_language %}
+        {% if source_lang == target_lang and source_lang != 'und' %}
+        <div class="row justify-content-center mt-4">
+            <div class="col-lg-6 col-md-8">
+                <div class="alert alert-info">
+                    Переклад не знадобився. Мова оригіналу на зображенні вже <strong>{{ result_record.get_target_language_display }}</strong>.
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    {% endwith %}
+    <hr>
+    <div class="row">
+        <div class="col-12">
+            <h2 class="mt-4 mb-4 text-center">Результати</h2>
+        </div>
+        <div class="col-lg-6 mb-4 d-flex flex-column">
+            <h5 class="text-center">Оригінал</h5>
+            <a data-bs-toggle="modal" data-bs-target="#imageModal" data-image-url="{{ result_record.original_image.url }}" style="cursor: pointer;">
+                <img src="{{ result_record.original_image.url }}" class="img-fluid border rounded mb-3" alt="Original Image">
+            </a>
+
+            <div class="position-relative">
+                <div class="form-floating">
+                    <textarea id="original-text" class="form-control" readonly style="height: 250px; resize: none;">{{ result_record.original_text }}</textarea>
+                    <label>Розпізнаний текст</label>
+                </div>
+                <button class="btn btn-sm btn-outline-secondary position-absolute top-0 end-0 mt-2 me-2" onclick="copyText('original-text', this)">
+                    Копіювати
+                </button>
+            </div>
+
+            <div class="mt-3 text-center">
+                 <a href="{% url 'translator:download_file' record_id=result_record.id file_type='original_text' %}" class="btn btn-secondary">Завантажити оригінал (.txt)</a>
+            </div>
+        </div>
+        <div class="col-lg-6 mb-4 d-flex flex-column">
+            <h5 class="text-center">Переклад</h5>
+            <a data-bs-toggle="modal" data-bs-target="#imageModal" data-image-url="{{ result_record.translated_image.url }}" style="cursor: pointer;">
+                <img src="{{ result_record.translated_image.url }}" class="img-fluid border rounded mb-3" alt="Translated Image">
+            </a>
+
+            <div class="position-relative">
+                <div class="form-floating">
+                    <textarea id="translated-text" class="form-control" readonly style="height: 250px; resize: none;">{{ result_record.translated_text }}</textarea>
+                    <label>Перекладений текст</label>
+                </div>
+                <button class="btn btn-sm btn-outline-secondary position-absolute top-0 end-0 mt-2 me-2" onclick="copyText('translated-text', this)">
+                    Копіювати
+                </button>
+            </div>
+
+             <div class="mt-3 text-center">
+                 <a href="{% url 'translator:download_file' record_id=result_record.id file_type='translated_text' %}" class="btn btn-info">Завантажити переклад (.txt)</a>
+            </div>
+        </div>
+    </div>
+{% endif %}
+
+<!-- HTML-структура для модального вікна (без змін) -->
+<div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="imageModalLabel">Перегляд зображення</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body text-center">
+        <img src="" id="modalImage" class="img-fluid" alt="Enlarged image">
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+
+{% block scripts %}
+<!-- JavaScript для кнопок (змінено текст) -->
+<script>
+function copyText(elementId, buttonElement) {
+    const textArea = document.getElementById(elementId);
+    navigator.clipboard.writeText(textArea.value).then(() => {
+        const originalText = buttonElement.innerText;
+        buttonElement.innerText = 'Скопійовано!';
+        setTimeout(() => {
+            buttonElement.innerText = originalText;
+        }, 2000);
+    }).catch(err => {
+        console.error('Failed to copy text: ', err);
+    });
+}
+
+const imageModal = document.getElementById('imageModal');
+if (imageModal) {
+    imageModal.addEventListener('show.bs.modal', event => {
+        const triggerElement = event.relatedTarget;
+        const imageUrl = triggerElement.getAttribute('data-image-url');
+        const modalImage = imageModal.querySelector('#modalImage');
+        modalImage.src = imageUrl;
+    });
+}
+</script>
+{% endblock %}

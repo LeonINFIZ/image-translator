@@ -1,0 +1,82 @@
+{% load static %}
+<!doctype html>
+<html lang="uk">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Перекладач зображень{% endblock %}</title>
+
+    <link rel="icon" type="image/svg+xml" href="{% static 'logo/ImageTranslator_logo_square.svg' %}">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+<header class="p-3 mb-3 border-bottom sticky-top bg-white">
+    <div class="container">
+        <div class="d-flex align-items-center">
+
+            <a href="{% url 'translator:translate' %}"
+               class="d-flex align-items-center mb-2 mb-lg-0 text-dark text-decoration-none">
+                <img src="{% static 'logo/ImageTranslator_logo_wide.svg' %}" alt="ImageTranslator Logo" height="40">
+            </a>
+
+            <ul class="nav col-12 col-lg-auto mx-auto mb-2 justify-content-center mb-md-0">
+                <li><a href="{% url 'translator:translate' %}"
+                       class="nav-link px-2 {% if request.resolver_match.view_name == 'translator:translate' or request.resolver_match.view_name == 'translator:result_detail' %}link-secondary{% else %}link-dark{% endif %}">Головна</a>
+                </li>
+                {% if user.is_authenticated %}
+                <li><a href="{% url 'translator:history' %}"
+                       class="nav-link px-2 {% if request.resolver_match.view_name == 'translator:history' %}link-secondary{% else %}link-dark{% endif %}">Історія</a>
+                </li>
+                {% endif %}
+            </ul>
+
+            <div class="text-end">
+                {% if user.is_authenticated %}
+                    <div class="dropdown">
+                        <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownUser1"
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            Привіт, {{ user.username }}
+                        </a>
+                        <ul class="dropdown-menu text-small" aria-labelledby="dropdownUser1">
+                            {%  if user.is_superuser %}
+                            <li>
+                                <a class="dropdown-item" href="/admin/">Адмін панель</a>
+                            </li>
+                                {% endif %}
+                            <li>
+                                <form action="{% url 'translator:logout' %}" method="post" class="d-inline">
+                                    {% csrf_token %}
+                                    <button type="submit" class="dropdown-item">Вийти</button>
+                                </form>
+                            </li>
+
+                        </ul>
+                    </div>
+                {% else %}
+                    <a href="{% url 'translator:login' %}" class="btn btn-outline-primary me-2">Увійти</a>
+                    <a href="{% url 'translator:register' %}" class="btn btn-primary">Зареєструватися</a>
+                {% endif %}
+            </div>
+
+        </div>
+    </div>
+</header>
+
+<main class="container my-4">
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+    {% block content %}{% endblock %}
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+{% block scripts %}{% endblock %}
+</body>
+</html>

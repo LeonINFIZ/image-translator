@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block title %}Історія перекладів{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-11 col-md-12">
+        <h1 class="mb-4 text-center">Історія перекладів</h1>
+
+        {% if records %}
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            {% for record in records %}
+            <div class="col">
+                <div class="card h-100 shadow-sm">
+                    <a href="{% url 'translator:result_detail' record_id=record.id %}">
+                        <img src="{{ record.original_image.url }}" class="card-img-top" alt="Зображення для перекладу"
+                             style="aspect-ratio: 4 / 3; object-fit: cover;">
+                    </a>
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title fs-6">
+                            <a href="{% url 'translator:result_detail' record_id=record.id %}"
+                               class="text-decoration-none text-body">
+                                Переклад на {{ record.get_target_language_display }}
+                            </a>
+                        </h5>
+                        <p class="card-text small text-muted">{{ record.created_at|date:"d.m.Y H:i" }}</p>
+                        <div class="mt-auto pt-3">
+                            <form method="post" action="{% url 'translator:delete_record' record_id=record.id %}"
+                                  onsubmit="return confirm('Ви впевнені, що хочете видалити цей запис?');">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-outline-danger w-100">Видалити</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="text-center py-5">
+            <p class="lead">Ваша історія порожня.</p>
+            <a href="{% url 'translator:translate' %}" class="btn btn-primary">Почати новий переклад</a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
