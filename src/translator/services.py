@@ -154,11 +154,15 @@ def process_image_translation(image_file, target_language="en", user=None):
     new_record.translated_image.save(f"{new_record.id}_translated.png", ContentFile(buffer.tobytes()), save=False)
 
     new_record.original_text_file.save(
-        f"{new_record.id}_original.txt", ContentFile(full_original_text.encode("utf-8")), save=False
+        f"{new_record.id}_original.txt",
+        ContentFile(full_original_text.encode("utf-8")),
+        save=False,
     )
 
     new_record.translated_text_file.save(
-        f"{new_record.id}_translated.txt", ContentFile(full_translated_text.encode("utf-8")), save=False
+        f"{new_record.id}_translated.txt",
+        ContentFile(full_translated_text.encode("utf-8")),
+        save=False,
     )
 
     new_record.save()

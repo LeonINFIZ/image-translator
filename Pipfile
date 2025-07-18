@@ -51,5 +51,6 @@ wcwidth = "==0.2.13"
 webargs = "==8.6.0"
 crispy-bootstrap5 = "==2025.4"
 isort = "*"
+pydotplus = "*"
 
 [dev-packages]

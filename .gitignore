@@ -169,7 +169,7 @@ dmypy.json
 cython_debug/
 
 # User-uploaded files
-/media/
+/src/media/
 
 # Tesseract-OCR installation directory
 /Tesseract-OCR/

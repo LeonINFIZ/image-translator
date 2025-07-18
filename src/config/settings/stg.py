@@ -1,9 +1,13 @@
 from config.settings.base import *  # NOQA:F403
 
-SECRET_KEY = "django-insecure-7rk)yxw7=uyftasz0b&9^ez)6$isnsznedn2l(f%!rs$7gdef$"
+SECRET_KEY = os.getenv("DJANGO_SECRET_KEY")
 
 DEBUG = False
-ALLOWED_HOSTS = []
+
+
+allowed_hosts_str = os.getenv("DJANGO_ALLOWED_HOSTS", "")
+ALLOWED_HOSTS = [host.strip() for host in allowed_hosts_str.split(",") if host.strip()]
+
 
 DATABASES = {
     "default": {
@@ -13,9 +17,10 @@ DATABASES = {
 }
 
 MEDIA_URL = "/media/"
-MEDIA_ROOT = BASE_DIR.parent / "media"
+MEDIA_ROOT = BASE_DIR / "media"
 
 STATIC_URL = "static/"
+STATIC_ROOT = BASE_DIR / "staticfiles"
 STATICFILES_DIRS = [
-    BASE_DIR.parent / "static",
+    BASE_DIR / "static",
 ]
