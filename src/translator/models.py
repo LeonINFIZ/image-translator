@@ -2,6 +2,8 @@ import uuid
 
 from django.conf import settings
 from django.db import models
+from common.models import BaseModel
+
 
 LANGUAGE_CHOICES = [
     ("uk", "Українська"),
@@ -14,7 +16,7 @@ LANGUAGE_CHOICES = [
 ]
 
 
-class TranslatedImage(models.Model):
+class TranslatedImage(BaseModel):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
@@ -31,8 +33,6 @@ class TranslatedImage(models.Model):
 
     original_text = models.TextField(blank=True)
     translated_text = models.TextField(blank=True)
-
-    created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         unique_together = ("user", "image_hash", "target_language")
